@@ -1,54 +1,134 @@
 {
   "posts": [
     {
-      "id": 1584927882080,
-      "name": "Brian adam",
-      "username": "Backend developer"
+      "name": "Santri Baru 02",
+      "studyProgram": "Magelang - Semarang",
+      "id": 1585034865081
     },
     {
-      "id": 1584921882080,
-      "name": "Brian adam",
-      "username": "Backend developer"
+      "name": "Santri Baru 03",
+      "studyProgram": "Jogja - Semarang",
+      "id": 1585035136563
     },
     {
-      "id": 1584921906657,
-      "name": "Esa kencana",
-      "username": "UI/UX designer"
+      "name": "Santri Baru 04",
+      "studyProgram": "Magelang - Jogja",
+      "id": 1585035175585
     },
     {
-      "name": "Diko Mahendra",
-      "username": "frontend",
-      "id": 1585181817951
+      "name": "Santri Baru 06",
+      "studyProgram": "Semarang - Jogja",
+      "id": 1585036744131
     },
     {
-      "name": "melisa febriani",
-      "username": "cooking",
-      "id": 1585182330558
+      "name": "Santri Baru 07",
+      "studyProgram": "Solo - Jogja",
+      "id": 1585036803285
     },
     {
-      "name": "muhammad adam",
-      "username": "mobile developer",
-      "id": 1585182357222
+      "name": "Santri Baru 09",
+      "studyProgram": "Jakarta - Bandung",
+      "id": 1585037142947
     },
     {
-      "name": "indri lestari",
-      "username": "backend",
-      "id": 1585185521958
+      "name": "Santri Baru 10",
+      "studyProgram": "Lintas Sumatra",
+      "id": 1585037158632
     },
     {
-      "name": "mira wiranti",
-      "username": "Casos",
-      "id": 1585185585903
+      "name": "Santri Baru 11",
+      "studyProgram": "Lintas Kalimantan",
+      "id": 1585037158633
     },
     {
-      "name": "a",
-      "username": "",
-      "id": 1585191410936
+      "name": "Santri Baru 12",
+      "studyProgram": "Surabaya - Malang",
+      "id": 1585037158634
     },
     {
-      "name": "a",
-      "username": "",
-      "id": 1585191412365
+      "name": "Santri Baru 13.1",
+      "studyProgram": "Surabaya - Madiun",
+      "id": 1585037158635
+    },
+    {
+      "name": "Santri Baru 15",
+      "studyProgram": "Jogja - Cilacap Kota",
+      "id": 1585037158637
+    },
+    {
+      "name": "Santri Baru 16",
+      "studyProgram": "Jakarta - Banyuwangi",
+      "id": 1585045906060
+    },
+    {
+      "name": "Kang Abbad",
+      "studyProgram": "Solo - Magelang",
+      "id": 1585055999393
+    },
+    {
+      "name": "Ozan Kaze",
+      "studyProgram": "Cirebon - Magelang",
+      "id": 1585056762916
+    },
+    {
+      "name": "Iman",
+      "studyProgram": "Malang - Magelang",
+      "id": 1585056762917
+    },
+    {
+      "name": "Khalid",
+      "studyProgram": "Jambi - Magelang",
+      "id": 1585056762918
+    },
+    {
+      "name": "Munir",
+      "studyProgram": "Kebumen - Magelang",
+      "id": 1585057895946
+    },
+    {
+      "name": "Yosa",
+      "studyProgram": "Semarang - Magelang",
+      "id": 1585057904090
+    },
+    {
+      "name": "Diko",
+      "studyProgram": "lampung - Magelang",
+      "id": 1585057917425
+    },
+    {
+      "name": "Miqdad",
+      "studyProgram": "Semarang - Magelang",
+      "id": 1585058569704
+    },
+    {
+      "id": 1585622968129,
+      "name": "Santi Baru 007",
+      "studyProgram": "front end 007"
+    },
+    {
+      "id": 1585624649017,
+      "name": "KangAbbad",
+      "studyProgram": "JUNIOR FRONTEND"
+    },
+    {
+      "id": 1585624956474,
+      "name": "Coba ditambah",
+      "studyProgram": "088"
+    },
+    {
+      "id": 1585625035359,
+      "name": "Cek dicoba Lagi",
+      "studyProgram": "lagi 02"
+    },
+    {
+      "id": 1585627217651,
+      "name": "coba lagi",
+      "studyProgram": "lagi jurusan"
+    },
+    {
+      "id": 1585627446535,
+      "name": "The Santri",
+      "studyProgram": "Front"
     }
   ]
 }

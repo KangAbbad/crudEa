@@ -1,24 +1,27 @@
 import React, { Component } from 'react'
 import Header from './components/header'
-import Navbar from './components/navbar'
+import MenuBar from './components/navbar'
 import Contents from './components/contents'
 import axios from 'axios'
+import {
+  Pagination,
+  PaginationItem,
+  PaginationLink
+} from 'reactstrap'
 
 class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      // state for crud
       dataSantri: [],
       newDataSantri: [],
       value: '',
       postDataSantri: {
+        id: '',
         name: '',
-        username: ''
+        studyProgram: ''
       },
       isUpdate: false,
-
-      // State for pagination
       currentPage: 1,
       dataSantriPerPage: 5,
       dataSantriWithLimit: [],
@@ -26,12 +29,11 @@ class App extends Component {
     }
   }
 
-  // fitur CRUD
   componentDidMount () {
-    this.getDataSantri()
+    this.onGetDataSantri()
   }
 
-  getDataSantri = () => {
+  onGetDataSantri = () => {
     axios.get('http://localhost:4000/posts?_sort=id&_order=desc')
       .then((result) => {
         this.setState({
@@ -40,30 +42,6 @@ class App extends Component {
           this.setPagination()
         })
       })
-  }
-
-  postDataSantri = () => {
-    axios.post('http://localhost:4000/posts ', this.state.postDataSantri)
-      .then((result) => {
-        this.getDataSantri()
-      })
-  }
-
-  putDataSantri = () => {
-    axios.put(`http://localhost:4000/posts/${this.state.postDataSantri.id}`, this.state.postDataSantri)
-      .then(res => {
-        this.getDataSantri()
-      })
-  }
-
-  simpanDataSantri = () => {
-    this.postDataSantri()
-    this.setState({
-      postDataSantri: {
-        name: '',
-        username: ''
-      }
-    })
   }
 
   onHandleInput = (event) => {
@@ -75,52 +53,69 @@ class App extends Component {
     }
     this.setState({
       postDataSantri: NewPostDataSantri
-    }, () => {
+    })
+  }
+
+  onHandlePost = () => {
+    axios.post('http://localhost:4000/posts', this.state.postDataSantri)
+      .then(() => {
+        this.onGetDataSantri()
+        this.setState({
+          postDataSantri: {
+            id: '',
+            name: '',
+            studyProgram: ''
+          }
+        })
+      })
+  }
+
+  onHandleUpdate = () => {
+    axios.put(`http://localhost:4000/posts/${this.state.postDataSantri.id}`, this.state.postDataSantri)
+      .then(() => {
+        this.onGetDataSantri()
+        this.setState({
+          postDataSantri: {
+            id: '',
+            name: '',
+            studyProgram: ''
+          }
+        })
+      })
+  }
+
+  onDataUpdate = (data) => {
+    this.setState({
+      postDataSantri: data,
+      isUpdate: true
     })
   }
 
   onHandleDelete = (id) => {
     axios.delete(`http://localhost:4000/posts/${id}`)
-      .then(res => {
-        this.getDataSantri()
+      .then(() => {
+        this.onGetDataSantri()
       })
   }
 
-  dataUpdate = (e) => {
-    this.setState({
-      postDataSantri: e,
-      isUpdate: true
-    })
-  }
-
-  searchedSantri = (e) => {
+  onSearchSantri = (e) => {
     this.setState({
       value: e.target.value
     }, () => {
       if (this.state.dataSantri) {
-        const searchedSantri = this.state.dataSantri.filter(
-          item => (
-            item.name.toLowerCase().indexOf(this.state.value.toLowerCase()) > -1
-          )
+        const newDataSantri = this.state.dataSantri.filter(
+          (item) => {
+            return item.name.toLowerCase().indexOf(this.state.value.toLowerCase()) > -1
+          }
         )
+
         this.setState({
-          newDataSantri: searchedSantri
+          newDataSantri
         }, () => this.setPagination())
       }
     })
   }
 
-  onHandleUpdate = () => {
-    this.putDataSantri()
-    this.setState({
-      postDataSantri: {
-        name: '',
-        username: ''
-      }
-    })
-  }
-
-  // FItur Pagination
   setPagination = () => {
     const { dataSantri, currentPage, dataSantriPerPage, value, newDataSantri } = this.state // destructuring assigments
     const lastIndexOfSantri = currentPage * dataSantriPerPage // menentukan nilai lastindex
@@ -151,16 +146,13 @@ class App extends Component {
     this.setState({
       dataSantriWithLimit, // merubah this.state.dataSantriWithLimit menjadi (variabel) dataSantriWithLimit
       paginationNumbers // merubah this.state.paginationNumbers menjadi (variabel) paginationNumbers
-    }, () => {
     })
   }
 
   onMovePage = (event) => {
-    this.setState(
-      {
-        currentPage: Number(event.target.id)
-      }, () => this.setPagination()
-    )
+    this.setState({
+      currentPage: Number(event.target.id)
+    }, () => this.setPagination())
   }
 
   onPreviousPage = () => {
@@ -180,56 +172,78 @@ class App extends Component {
   }
 
   render () {
-    const { onHandleInput, simpanDataSantri, onHandleDelete, onHandleUpdate, dataUpdate, searchedSantri, onPreviousPage, onNextPage } = this
-    const { postDataSantri, value, paginationNumbers, dataSantriWithLimit, currentPage } = this.state
+    const {
+      onHandleInput,
+      onHandlePost,
+      onHandleDelete,
+      onHandleUpdate,
+      onSearchSantri,
+      onDataUpdate,
+      onPreviousPage,
+      onNextPage
+    } = this
+
+    const {
+      postDataSantri,
+      value,
+      paginationNumbers,
+      dataSantriWithLimit,
+      currentPage
+    } = this.state
+
     return (
-      <div className='container-fluid bg-info text-light'>
+      <div className='bg-info text-light' style={{ height: '100vh' }}>
         <Header />
-        <Navbar
-          onHandleInput={onHandleInput}
-          simpanDataSantri={simpanDataSantri}
+
+        <MenuBar
           postDataSantri={postDataSantri}
-          searchedSantri={searchedSantri}
+          onHandleInput={onHandleInput}
+          onHandlePost={onHandlePost}
+          onSearchSantri={onSearchSantri}
         />
+
         <Contents
+          value={value}
+          dataSantri={dataSantriWithLimit}
+          newDataSantri={dataSantriWithLimit}
+          postDataSantri={postDataSantri}
+          onDataUpdate={onDataUpdate}
           onHandleUpdate={onHandleUpdate}
           onHandleInput={onHandleInput}
-          simpanDataSantri={simpanDataSantri}
           onHandleDelete={onHandleDelete}
-          dataUpdate={dataUpdate}
-          newDataSantri={dataSantriWithLimit} // update pagination
-          dataSantri={dataSantriWithLimit} // update for fitur pagination
-          postDataSantri={postDataSantri}
-          searchedSantri={searchedSantri}
-          value={value}
         />
-        <nav aria-label='Page navigation example '>
-          <ul className='pagination justify-content-end'>
-            <li className='page-item'>
-              <a className='page-link text-info' href='!#' onClick={() => onPreviousPage()}>
-                Previous
-              </a>
-            </li>
 
-            {paginationNumbers.map((item, index) => (
-              <li className={`page-item ${currentPage === item && 'active'}`} key={index}>
-                <a
-                  className='page-link text-info '
-                  id={item}
-                  href='!#'
-                  onClick={(event) => this.onMovePage(event)}
-                >
-                  {item}
-                </a>
-              </li>
-            ))}
-            <li className='page-item'>
-              <a className='page-link  text-info' href='!#' onClick={() => onNextPage()}>
-                Next
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <Pagination
+          aria-label='Page navigation example'
+          size='sm'
+          className='d-flex justify-content-end container-fluid'
+        >
+          <PaginationItem disabled={currentPage <= 1}>
+            <PaginationLink onClick={onPreviousPage}>
+              Previous
+            </PaginationLink>
+          </PaginationItem>
+
+          {paginationNumbers.map((item, index) => (
+            <PaginationItem
+              key={index}
+              active={currentPage === item}
+            >
+              <PaginationLink
+                id={item}
+                onClick={(event) => this.onMovePage(event)}
+              >
+                {item}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          <PaginationItem disabled={currentPage === paginationNumbers.length}>
+            <PaginationLink onClick={onNextPage}>
+              Next
+            </PaginationLink>
+          </PaginationItem>
+        </Pagination>
       </div>
     )
   }
