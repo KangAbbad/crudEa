@@ -14,6 +14,7 @@ import {
 } from 'reactstrap'
 
 let idSantriToDelete
+let modalVisible
 
 const DataSantri = (props) => {
   return (
@@ -59,13 +60,11 @@ const Thead = () => {
 }
 
 const Tbody = (props) => {
-  // Untuk modal edit
-  const [isEditModalVisible, setEditModal] = useState(false)
-  const onToggleEditModal = () => setEditModal(!isEditModalVisible)
+  const [isModalVisible, setModal] = useState(false)
+  const onToggleModal = () => setModal(!isModalVisible)
 
-  // Untuk modal delete
-  const [isDeleteModalVisible, setDeleteModal] = useState(false)
-  const onToggleDeleteModal = () => setDeleteModal(!isDeleteModalVisible)
+  const isDeleteModalVisible = isModalVisible && modalVisible === 'delete'
+  const isEditModalVisible = isModalVisible && modalVisible === 'edit'
 
   return (
     <tbody>
@@ -77,18 +76,23 @@ const Tbody = (props) => {
           <td>
             <div className='row justify-content-center'>
               <ActionButton
-                button='delete'
+                titleButton='Hapus'
+                colorButton='danger'
+                className='mr-2'
                 onClick={() => {
                   idSantriToDelete = item.id
-                  onToggleDeleteModal()
+                  modalVisible = 'delete'
+                  onToggleModal()
                 }}
               />
 
               <ActionButton
-                button='edit'
+                titleButton='Ubah'
+                colorButton='warning'
                 onClick={() => {
                   props.onDataUpdate(item)
-                  onToggleEditModal()
+                  modalVisible = 'edit'
+                  onToggleModal()
                 }}
               />
             </div>
@@ -96,18 +100,18 @@ const Tbody = (props) => {
         </tr>
       ))}
 
-      <EditModal
-        isEditModalVisible={isEditModalVisible}
-        postDataSantri={props.postDataSantri}
-        onToggleEditModal={onToggleEditModal}
-        onHandleInput={props.onHandleInput}
-        onHandleUpdate={props.onHandleUpdate}
+      <ActionModal
+        isModalVisible={isDeleteModalVisible}
+        onHandleDelete={props.onHandleDelete}
+        onToggleModal={onToggleModal}
       />
 
-      <DeleteModal
-        isDeleteModalVisible={isDeleteModalVisible}
-        onToggleDeleteModal={onToggleDeleteModal}
-        onHandleDelete={props.onHandleDelete}
+      <ActionModal
+        isModalVisible={isEditModalVisible}
+        postDataSantri={props.postDataSantri}
+        onHandleUpdate={props.onHandleUpdate}
+        onHandleInput={props.onHandleInput}
+        onToggleModal={onToggleModal}
       />
     </tbody>
   )
@@ -119,124 +123,162 @@ const renderDataSantri = (props) => {
     : props.dataSantri
 }
 
-const EditModal = (props) => {
+const ActionButton = (props) => {
+  return (
+    <Button
+      outline={props.outlineButton}
+      color={props.colorButton}
+      className={props.className}
+      onClick={props.onClick}
+    >
+      {props.titleButton}
+    </Button>
+  )
+}
+
+const ActionModal = (props) => {
+  const EditModal = modalVisible === 'edit'
+  const DeleteModal = modalVisible === 'delete'
+
+  const titleHeader = EditModal
+    ? 'Ubah Data Santri'
+    : DeleteModal
+      ? 'Apakah ingin menghapus santri?'
+      : 'Salah passing modalVisible'
+
+  const onToggleHeader = EditModal
+    ? props.onToggleModal
+    : DeleteModal
+      ? null
+      : () => {}
+
+  const titleButton = EditModal
+    ? 'Ubah'
+    : DeleteModal
+      ? 'Hapus'
+      : 'Salah Button'
+
+  const colorButtonLeft = EditModal
+    ? 'info'
+    : DeleteModal
+      ? 'secondary'
+      : 'success'
+
+  const colorButtonRight = EditModal
+    ? 'secondary'
+    : DeleteModal
+      ? 'info'
+      : 'success'
+
+  const onClick = EditModal
+    ? props.onHandleUpdate
+    : DeleteModal
+      ? () => {
+        props.onToggleModal()
+        props.onHandleDelete(idSantriToDelete)
+      }
+      : () => {}
+
+  const classNameDeleteModal = DeleteModal ? 'justify-content-center border-0' : ''
+
   return (
     <Modal
-      isOpen={props.isEditModalVisible}
-      toggle={() => props.onToggleEditModal()}
+      isOpen={props.isModalVisible}
+      toggle={() => props.onToggleModal()}
     >
-      <ModalHeader toggle={() => props.onToggleEditModal()}>
-        Update Data Santri
-      </ModalHeader>
+      <ActionModalHeader
+        classNameDeleteModal={classNameDeleteModal}
+        titleHeader={titleHeader}
+        onToggleHeader={onToggleHeader}
+      />
+
+      <ActionModalBody
+        isBodyVisible={EditModal}
+        postDataSantri={props.postDataSantri}
+        onHandleInput={props.onHandleInput}
+      />
+
+      <ActionModalFooter
+        classNameDeleteModal={classNameDeleteModal}
+        titleButton={titleButton}
+        colorButtonLeft={colorButtonLeft}
+        colorButtonRight={colorButtonRight}
+        outlineButtonLeft={DeleteModal}
+        outlineButtonRight={EditModal}
+        onClick={onClick}
+        onToggleModal={props.onToggleModal}
+      />
+    </Modal>
+  )
+}
+
+const ActionModalHeader = (props) => {
+  return (
+    <ModalHeader
+      // eslint-disable-next-line react/jsx-handler-names
+      toggle={props.onToggleHeader}
+      className={props.classNameDeleteModal}
+    >
+      {props.titleHeader}
+    </ModalHeader>
+  )
+}
+
+const ActionModalBody = (props) => {
+  if (props.isBodyVisible) {
+    return (
       <ModalBody>
         <Form>
           <FormGroup>
-            <Label for='name'>Update Nama</Label>
+            <Label for='name'>Nama Santri</Label>
             <Input
+              onChange={props.onHandleInput}
+              value={props.postDataSantri.name}
               type='text'
               name='name'
               id='name'
-              placeholder='nama santri'
-              value={props.postDataSantri.name}
-              onChange={(e) => props.onHandleInput(e)}
+              placeholder='nama santri ...'
             />
           </FormGroup>
+
           <FormGroup>
-            <Label for='studyProgram'>Update Jurusan</Label>
+            <Label for='name'>Jurusan</Label>
             <Input
+              onChange={props.onHandleInput}
+              value={props.postDataSantri.studyProgram}
               type='text'
               name='studyProgram'
               id='studyProgram'
-              placeholder='jurusan santri'
-              value={props.postDataSantri.studyProgram}
-              onChange={(e) => props.onHandleInput(e)}
+              placeholder='jurusan santri ...'
             />
           </FormGroup>
         </Form>
       </ModalBody>
-      <ModalFooter>
-        <Button
-          color='info'
-          onClick={() => {
-            props.onToggleEditModal()
-            props.onHandleUpdate()
-          }}
-        >
-          Update
-        </Button>
-        <Button
-          outline
-          color='secondary'
-          onClick={props.onToggleEditModal}
-        >
-          Batal
-        </Button>
-      </ModalFooter>
-    </Modal>
-  )
+    )
+  } else {
+    return null
+  }
 }
 
-const DeleteModal = (props) => {
+const ActionModalFooter = (props) => {
   return (
-    <Modal
-      isOpen={props.isDeleteModalVisible}
-      toggle={() => props.onToggleDeleteModal()}
-    >
-      <ModalHeader className='justify-content-center border-0'>
-        Apakah anda yakin ingin menghapus data ini?
-      </ModalHeader>
-      <ModalFooter className='border-0'>
-        <Button
-          outline
-          color='secondary'
-          onClick={() => {
-            props.onToggleDeleteModal()
-            props.onHandleDelete(idSantriToDelete)
-          }}
-        >
-          Delete
-        </Button>
-        <Button
-          color='info'
-          onClick={props.onToggleDeleteModal}
-        >
-          Batal
-        </Button>
-      </ModalFooter>
-    </Modal>
-  )
-}
+    <ModalFooter className={props.classNameDeleteModal}>
+      <ActionButton
+        titleButton={props.titleButton}
+        colorButton={props.colorButtonLeft}
+        outlineButton={props.outlineButtonLeft}
+        className='px-5'
+        onClick={props.onClick}
+      />
 
-const ActionButton = (props) => {
-  const EditButton = props.button === 'edit'
-  const DeleteButton = props.button === 'delete'
-
-  const color = EditButton
-    ? 'warning'
-    : DeleteButton
-      ? 'danger'
-      : 'info'
-
-  const className = EditButton
-    ? 'text-white'
-    : DeleteButton
-      ? 'mr-2'
-      : ''
-
-  const title = EditButton
-    ? 'Edit'
-    : DeleteButton
-      ? 'Delete'
-      : 'Custom Button'
-
-  return (
-    <Button
-      color={color}
-      className={className}
-      onClick={props.onClick}
-    >
-      {title}
-    </Button>
+      <ActionButton
+        titleButton='Batal'
+        colorButton={props.colorButtonRight}
+        outlineButton={props.outlineButtonRight}
+        className='px-5'
+        onClick={props.onToggleModal}
+      />
+    </ModalFooter>
   )
 }
 
@@ -248,23 +290,57 @@ Tbody.propTypes = {
   onHandleDelete: PropTypes.func
 }
 
-EditModal.propTypes = {
-  isEditModalVisible: PropTypes.bool,
-  postDataSantri: PropTypes.object,
-  onToggleEditModal: PropTypes.func,
-  onHandleInput: PropTypes.func,
-  onHandleUpdate: PropTypes.func
-}
-
-DeleteModal.propTypes = {
-  isDeleteModalVisible: PropTypes.bool,
-  onToggleDeleteModal: PropTypes.func,
-  onHandleDelete: PropTypes.func
-}
-
 ActionButton.propTypes = {
-  button: PropTypes.string,
+  outlineButton: PropTypes.bool,
+  colorButton: PropTypes.string,
+  className: PropTypes.string,
+  titleButton: PropTypes.string,
   onClick: PropTypes.func
 }
+
+ActionButton.defaultProps = {
+  outlineButton: false,
+  colorButton: 'success',
+  className: '',
+  titleButton: 'Custom Button',
+  onClick: () => {}
+}
+
+ActionModal.propTypes = {
+  isModalVisible: PropTypes.bool,
+  postDataSantri: PropTypes.object,
+  onHandleInput: PropTypes.func,
+  onHandleUpdate: PropTypes.func,
+  onHandleDelete: PropTypes.func,
+  onToggleModal: PropTypes.func
+}
+
+ActionModalHeader.propTypes = {
+  onToggleHeader: PropTypes.func,
+  classNameDeleteModal: PropTypes.string,
+  titleHeader: PropTypes.string
+}
+
+ActionModalBody.propTypes = {
+  postDataSantri: PropTypes.object,
+  onHandleInput: PropTypes.func
+}
+
+ActionModalFooter.propTypes = {
+  classNameDeleteModal: PropTypes.string,
+  titleButton: PropTypes.string,
+  outlineButtonLeft: PropTypes.bool,
+  outlineButtonRight: PropTypes.bool,
+  colorButtonLeft: PropTypes.string,
+  colorButtonRight: PropTypes.string,
+  onClick: PropTypes.func,
+  onToggleModal: PropTypes.func
+}
+
+// FormModal.propTypes = {
+//   name: PropTypes.string,
+//   value: PropTypes.object,
+//   onChange: PropTypes.func
+// }
 
 export default DataSantri
