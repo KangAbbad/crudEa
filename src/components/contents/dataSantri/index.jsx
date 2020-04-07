@@ -66,6 +66,31 @@ const Tbody = (props) => {
   const isDeleteModalVisible = isModalVisible && modalVisible === 'delete'
   const isEditModalVisible = isModalVisible && modalVisible === 'edit'
 
+  const actionButtonData = (item, id) => {
+    return [
+      {
+        titleButton: 'Hapus',
+        colorButton: 'danger',
+        className: 'mr-2',
+        onClick: () => {
+          idSantriToDelete = id
+          modalVisible = 'delete'
+          onToggleModal()
+        }
+      },
+      {
+        titleButton: 'Ubah',
+        colorButton: 'warning',
+        className: '',
+        onClick: () => {
+          props.onDataUpdate(item)
+          modalVisible = 'edit'
+          onToggleModal()
+        }
+      }
+    ]
+  }
+
   return (
     <tbody>
       {renderDataSantri(props).map((item, id) => (
@@ -75,7 +100,19 @@ const Tbody = (props) => {
           <td>{item.studyProgram}</td>
           <td>
             <div className='row justify-content-center'>
-              <ActionButton
+              {actionButtonData(item, item.id).map((itemBtn, index) => {
+                return (
+                  <ActionButton
+                    key={index}
+                    titleButton={itemBtn.titleButton}
+                    colorButton={itemBtn.colorButton}
+                    className={itemBtn.className}
+                    onClick={() => itemBtn.onClick()}
+                  />
+                )
+              })}
+
+              {/* <ActionButton
                 titleButton='Hapus'
                 colorButton='danger'
                 className='mr-2'
@@ -84,9 +121,9 @@ const Tbody = (props) => {
                   modalVisible = 'delete'
                   onToggleModal()
                 }}
-              />
+              /> */}
 
-              <ActionButton
+              {/* <ActionButton
                 titleButton='Ubah'
                 colorButton='warning'
                 onClick={() => {
@@ -94,7 +131,7 @@ const Tbody = (props) => {
                   modalVisible = 'edit'
                   onToggleModal()
                 }}
-              />
+              /> */}
             </div>
           </td>
         </tr>
@@ -104,6 +141,7 @@ const Tbody = (props) => {
         isModalVisible={isDeleteModalVisible}
         onHandleDelete={props.onHandleDelete}
         onToggleModal={onToggleModal}
+        name='Nama saya diko'
       />
 
       <ActionModal
@@ -112,6 +150,7 @@ const Tbody = (props) => {
         onHandleUpdate={props.onHandleUpdate}
         onHandleInput={props.onHandleInput}
         onToggleModal={onToggleModal}
+        name='Nama saya abbad'
       />
     </tbody>
   )
@@ -171,7 +210,10 @@ const ActionModal = (props) => {
       : 'success'
 
   const onClick = EditModal
-    ? props.onHandleUpdate
+    ? () => {
+      props.onToggleModal()
+      props.onHandleUpdate()
+    }
     : DeleteModal
       ? () => {
         props.onToggleModal()

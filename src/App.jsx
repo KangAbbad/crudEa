@@ -176,7 +176,8 @@ class App extends Component {
       onSearchSantri,
       onDataUpdate,
       onPreviousPage,
-      onNextPage
+      onNextPage,
+      onMovePage
     } = this
 
     const {
@@ -214,6 +215,7 @@ class App extends Component {
           paginationNumbers={paginationNumbers}
           onPreviousPage={onPreviousPage}
           onNextPage={onNextPage}
+          onMovePage={onMovePage}
         />
       </div>
     )

@@ -1,118 +1,127 @@
-import React, { useState } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Navbar,
   NavbarToggler,
   Collapse,
   Nav,
-  NavItem,
-  Button,
-  Input,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Label
+  NavItem
 } from 'reactstrap'
+import {
+  ActionButton,
+  ActionModal,
+  ActionInput
+} from '../action'
 
-const MenuBar = (props) => {
-  // Buat toggle navbar
-  const [isNavbarVisible, setNavbarOpen] = useState(false)
-  const onToggleNavbar = () => setNavbarOpen(!isNavbarVisible)
+class MenuBar extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      isNavbarVisible: false,
+      inputDataModal: [
+        {
+          label: 'Nama Santri',
+          type: 'text',
+          name: 'name',
+          id: 'name',
+          placeholder: 'masukkan nama',
+          value: props.postDataSantri.name,
+          onChangeInput: props.onHandleInput
+        },
+        {
+          label: 'Jurusan',
+          type: 'text',
+          name: 'studyProgram',
+          id: 'studyProgram',
+          placeholder: 'masukkan jurusan',
+          value: props.postDataSantri.studyProgram,
+          onChangeInput: props.onHandleInput
+        },
+        {
+          label: 'Lulusan',
+          type: 'text',
+          name: 'lulusan',
+          id: 'lulusan',
+          placeholder: 'masukkan lulusan',
+          value: '',
+          onChangeInput: props.onHandleInput
+        }
+      ],
+      buttonModal: [
+        {
+          outlineButton: false,
+          colorButton: 'info',
+          titleButton: 'Tambah',
+          onClickButton: props.onHandlePost
+        },
+        {
+          outlineButton: true,
+          colorButton: 'secondary',
+          titleButton: 'Batal',
+          onClickButton: () => {}
+        },
+        {
+          outlineButton: false,
+          colorButton: 'danger',
+          titleButton: 'Custom Button',
+          onClickButton: () => {}
+        }
+      ]
+    }
+  }
 
-  // Buat toggle modal
-  const [isCreateModalVisible, setCreateModal] = useState(false)
-  const onToggleCreateModal = () => setCreateModal(!isCreateModalVisible)
+  onToggleNavbar = () => {
+    this.setState(prevState => ({
+      isNavbarVisible: !prevState.isNavbarVisible
+    }))
+  }
 
-  return (
-    <div className='container-fluid'>
-      <Navbar
-        color='light'
-        light
-        expand='md'
-        className='rounded'
-      >
-        <Button
-          color='info'
-          onClick={onToggleCreateModal}
+  render () {
+    return (
+      <div className='container-fluid'>
+        <Navbar
+          color='light'
+          light
+          expand='md'
+          className='rounded'
         >
-          Tambah santri
-        </Button>
+          {/* ADD BUTTON */}
+          <ActionButton
+            titleButton='Tambah Santri'
+            colorButton='info'
+            onClickButton={() => this.actionModal.onToggleModal()}
+          />
 
-        {/* MODAL */}
-        <Modal
-          isOpen={isCreateModalVisible}
-          toggle={onToggleCreateModal}
-        >
-          <ModalHeader toggle={onToggleCreateModal}>
-            Tambah Santri
-          </ModalHeader>
-          <ModalBody>
-            <Form>
-              <FormGroup>
-                <Label for='name'>Nama Santri</Label>
-                <Input
-                  type='text'
-                  name='name'
-                  id='name'
-                  placeholder='nama lengkap'
-                  value={props.postDataSantri.name}
-                  onChange={(e) => props.onHandleInput(e)}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for='studyProgram'>Jurusan</Label>
-                <Input
-                  type='text'
-                  name='studyProgram'
-                  id='studyProgram'
-                  placeholder='program studi'
-                  value={props.postDataSantri.studyProgram}
-                  onChange={(e) => props.onHandleInput(e)}
-                />
-              </FormGroup>
-            </Form>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color='info'
-              onClick={() => {
-                props.onHandlePost()
-                onToggleCreateModal()
-              }}
-            >
-              Simpan
-            </Button>
-            <Button
-              outline
-              color='secondary'
-              onClick={onToggleCreateModal}
-            >
-              Batal
-            </Button>
-          </ModalFooter>
-        </Modal>
+          {/* MODAL */}
+          <ActionModal
+            ref={ref => { this.actionModal = ref }}
+            titleModalHeader='Tambah Data Santri'
+            inputDataModal={this.state.inputDataModal}
+            buttonModal={this.state.buttonModal}
+            postDataSantri={this.props.postDataSantri}
+            onHandleInput={this.props.onHandleInput}
+            onHandlePost={this.props.onHandlePost}
+          />
 
-        {/* FORM INPUT */}
-        <NavbarToggler onClick={onToggleNavbar} />
-        <Collapse isOpen={isNavbarVisible} navbar>
-          <Nav className='ml-auto' navbar>
-            <NavItem>
-              <Input
-                type='search'
-                placeholder='cari santri'
-                className='form-control mr-sm-2'
-                value={props.value}
-                onChange={(e) => props.onSearchSantri(e)}
-              />
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Navbar>
-    </div>
-  )
+          {/* FORM INPUT */}
+          <NavbarToggler onClick={() => this.onToggleNavbar()} />
+          <Collapse isOpen={this.state.isNavbarVisible} navbar>
+            <Nav className='ml-auto' navbar>
+              <NavItem>
+                <ActionInput
+                  type='search'
+                  placeholder='cari santri'
+                  className='form-control mr-sm-2'
+                  value={this.props.value}
+                  onChangeInput={this.props.onSearchSantri}
+                />
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </div>
+    )
+  }
 }
 
 MenuBar.propTypes = {
