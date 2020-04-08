@@ -55,7 +55,7 @@ class App extends Component {
   }
 
   onHandlePost = () => {
-    axios.post('https://my-json-server.typicode.com/KangAbbad/crudEa/posts', this.state.postDataSantri)
+    axios.post('https://my-json-server.typicode.com/KangAbbad/crudEa/db', this.state.postDataSantri)
       .then(() => {
         this.onGetDataSantri()
         this.setState({
