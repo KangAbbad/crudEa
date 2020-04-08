@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react'
 import Header from './components/header'
 import MenuBar from './components/navbar'
@@ -30,6 +31,7 @@ class App extends Component {
   }
 
   onGetDataSantri = () => {
+    // axios.get('http://localhost:4000/posts?_sort=id&_order=desc')
     axios.get('https://my-json-server.typicode.com/KangAbbad/crudEa/posts?_sort=id&_order=desc')
       .then((result) => {
         this.setState({
@@ -38,6 +40,7 @@ class App extends Component {
           this.setPagination()
         })
       })
+      .catch(error => console.log(error))
   }
 
   onHandleInput = (event) => {
@@ -55,7 +58,8 @@ class App extends Component {
   }
 
   onHandlePost = () => {
-    axios.post('https://my-json-server.typicode.com/KangAbbad/crudEa/posts', this.state.postDataSantri)
+    // axios.post('http://localhost:4000/posts', this.state.postDataSantri)
+    axios.post('https://my-json-server.typicode.com/KangAbbad/crudEa/posts/', JSON.stringify(this.state.postDataSantri))
       .then(() => {
         this.onGetDataSantri()
         this.setState({
@@ -81,6 +85,7 @@ class App extends Component {
           }
         })
       })
+      .catch(error => console.log(error))
   }
 
   onDataUpdate = (data) => {
@@ -95,6 +100,7 @@ class App extends Component {
       .then(() => {
         this.onGetDataSantri()
       })
+      .catch(error => console.log(error))
   }
 
   onSearchSantri = (e) => {
@@ -224,7 +230,7 @@ class App extends Component {
         <div className='ml-3 mt-3'>
           © 2020 Template by&nbsp;
           <a
-            href='http://github.com/Diko99'
+            href='https://github.com/Diko99'
             style={{
               color: 'white',
               textDecoration: 'none'
