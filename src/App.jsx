@@ -69,7 +69,7 @@ class App extends Component {
   }
 
   onHandleUpdate = () => {
-    axios.put(`http://localhost:4000/posts/${this.state.postDataSantri.id}`, this.state.postDataSantri)
+    axios.put(`https://my-json-server.typicode.com/KangAbbad/crudEa/posts/${this.state.postDataSantri.id}`, this.state.postDataSantri)
       .then(() => {
         this.onGetDataSantri()
         this.setState({
