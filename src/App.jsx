@@ -49,6 +49,8 @@ class App extends Component {
     }
     this.setState({
       postDataSantri: NewPostDataSantri
+    }, () => {
+      // console.log('this.state.postDataSantri.name:', this.state.postDataSantri.name)
     })
   }
 
@@ -217,6 +219,19 @@ class App extends Component {
           onNextPage={onNextPage}
           onMovePage={onMovePage}
         />
+
+        <div className='ml-3 mt-3'>
+          © 2020 Template by&nbsp;
+          <a
+            href='http://github.com/Diko99'
+            style={{
+              color: 'white',
+              textDecoration: 'none'
+            }}
+          >
+            Diko Mahendra
+          </a>
+        </div>
       </div>
     )
   }

@@ -32,7 +32,7 @@ const ActionInput = (props) => {
       name={props.name}
       id={props.id}
       placeholder={props.placeholder}
-      value={props.value}
+      value={props.valueInput}
       className={props.className}
       onChange={(e) => props.onChangeInput(e)}
     />
@@ -130,7 +130,7 @@ ActionInput.propTypes = {
   name: PropTypes.string,
   id: PropTypes.string,
   placeholder: PropTypes.string,
-  value: PropTypes.string,
+  valueInput: PropTypes.string,
   className: PropTypes.string,
   onChangeInput: PropTypes.func
 }

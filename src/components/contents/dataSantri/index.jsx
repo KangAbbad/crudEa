@@ -104,10 +104,7 @@ const Tbody = (props) => {
                 return (
                   <ActionButton
                     key={index}
-                    titleButton={itemBtn.titleButton}
-                    colorButton={itemBtn.colorButton}
-                    className={itemBtn.className}
-                    onClick={() => itemBtn.onClick()}
+                    {...itemBtn}
                   />
                 )
               })}
@@ -141,7 +138,6 @@ const Tbody = (props) => {
         isModalVisible={isDeleteModalVisible}
         onHandleDelete={props.onHandleDelete}
         onToggleModal={onToggleModal}
-        name='Nama saya diko'
       />
 
       <ActionModal
@@ -150,7 +146,6 @@ const Tbody = (props) => {
         onHandleUpdate={props.onHandleUpdate}
         onHandleInput={props.onHandleInput}
         onToggleModal={onToggleModal}
-        name='Nama saya abbad'
       />
     </tbody>
   )

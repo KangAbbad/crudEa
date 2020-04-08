@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -25,8 +27,8 @@ class MenuBar extends Component {
           name: 'name',
           id: 'name',
           placeholder: 'masukkan nama',
-          value: props.postDataSantri.name,
-          onChangeInput: props.onHandleInput
+          // valueInput: this.props.postDataSantri.name,
+          onChangeInput: this.props.onHandleInput
         },
         {
           label: 'Jurusan',
@@ -34,17 +36,8 @@ class MenuBar extends Component {
           name: 'studyProgram',
           id: 'studyProgram',
           placeholder: 'masukkan jurusan',
-          value: props.postDataSantri.studyProgram,
-          onChangeInput: props.onHandleInput
-        },
-        {
-          label: 'Lulusan',
-          type: 'text',
-          name: 'lulusan',
-          id: 'lulusan',
-          placeholder: 'masukkan lulusan',
-          value: '',
-          onChangeInput: props.onHandleInput
+          // valueInput: this.props.postDataSantri.studyProgram,
+          onChangeInput: this.props.onHandleInput
         }
       ],
       buttonModal: [
@@ -59,15 +52,12 @@ class MenuBar extends Component {
           colorButton: 'secondary',
           titleButton: 'Batal',
           onClickButton: () => {}
-        },
-        {
-          outlineButton: false,
-          colorButton: 'danger',
-          titleButton: 'Custom Button',
-          onClickButton: () => {}
         }
       ]
     }
+
+    console.log('constructor')
+    console.log(props.postDataSantri)
   }
 
   onToggleNavbar = () => {
@@ -76,7 +66,33 @@ class MenuBar extends Component {
     }))
   }
 
+  componentDidUpdate (prevProps, prevState) {
+    console.log('constructor')
+    console.log(this.props.postDataSantri)
+  }
+
   render () {
+    const inputDataModal = [
+      {
+        label: 'Nama Santri',
+        type: 'text',
+        name: 'name',
+        id: 'name',
+        placeholder: 'masukkan nama',
+        valueInput: this.props.postDataSantri.name,
+        onChangeInput: this.props.onHandleInput
+      },
+      {
+        label: 'Jurusan',
+        type: 'text',
+        name: 'studyProgram',
+        id: 'studyProgram',
+        placeholder: 'masukkan jurusan',
+        valueInput: this.props.postDataSantri.studyProgram,
+        onChangeInput: this.props.onHandleInput
+      }
+    ]
+
     return (
       <div className='container-fluid'>
         <Navbar
@@ -98,9 +114,6 @@ class MenuBar extends Component {
             titleModalHeader='Tambah Data Santri'
             inputDataModal={this.state.inputDataModal}
             buttonModal={this.state.buttonModal}
-            postDataSantri={this.props.postDataSantri}
-            onHandleInput={this.props.onHandleInput}
-            onHandlePost={this.props.onHandlePost}
           />
 
           {/* FORM INPUT */}
