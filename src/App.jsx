@@ -52,14 +52,13 @@ class App extends Component {
     }
     this.setState({
       postDataSantri: NewPostDataSantri
-    }, () => {
-      // console.log('this.state.postDataSantri.name:', this.state.postDataSantri.name)
     })
   }
 
   onHandlePost = () => {
-    // axios.post('http://localhost:4000/posts', this.state.postDataSantri)
-    axios.post('https://my-json-server.typicode.com/KangAbbad/crudEa/posts/', JSON.stringify(this.state.postDataSantri))
+    const { postDataSantri } = this.state
+    // axios.post('http://localhost:4000/posts', postDataSantri)
+    axios.post('https://my-json-server.typicode.com/KangAbbad/crudEa/posts', postDataSantri)
       .then(() => {
         this.onGetDataSantri()
         this.setState({
@@ -74,7 +73,8 @@ class App extends Component {
   }
 
   onHandleUpdate = () => {
-    axios.put(`https://my-json-server.typicode.com/KangAbbad/crudEa/posts/${this.state.postDataSantri.id}`, this.state.postDataSantri)
+    const { postDataSantri } = this.state
+    axios.put(`https://my-json-server.typicode.com/KangAbbad/crudEa/posts/${postDataSantri.id}`, postDataSantri)
       .then(() => {
         this.onGetDataSantri()
         this.setState({
